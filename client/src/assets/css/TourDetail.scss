@@ -1,0 +1,51 @@
+.tour-images-slider {
+    .swiper-slide {
+        padding-top: 15%;
+        overflow: hidden;
+        position: relative;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    }
+
+    .swiper-button-prev {
+        left: 30;
+        color: rgb(255, 255, 255);
+    }
+
+    .swiper-button-next {
+        right: 30;
+        color: rgb(255, 255, 255);
+    }
+}
+
+.tour-img-thumbs-wrapper {
+    .swiper-slide {
+        cursor: pointer;
+        border: 1px solid #dddbdb;
+
+        &-thumb-active {
+            border-color: #ff02f2;
+        }
+    }
+
+    &-wrapper {
+        width: 100%;
+        padding-top: 65%;
+        overflow: hidden;
+        position: relative;
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+    }
+}
