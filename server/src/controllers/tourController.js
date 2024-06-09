@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { Tour, TourImg, TourSite, TourSchedule } from '../models/index.js';
-import uploadImage from '../utils/uploadImage.js';
+import uploadImage, { deleteImage } from '../utils/uploadImage.js';
+import { splitFileName } from '../utils/splitFilename.js';
 
 const createTour = async (req, res, next) => {
     try {
@@ -73,7 +74,6 @@ const getTour = async (req, res, next) => {
                             [Op.gte]: new Date(),
                         },
                     },
-                    order: [['departureDay', 'ASC']],
                     required: false,
                     include: [
                         {
@@ -82,10 +82,21 @@ const getTour = async (req, res, next) => {
                         },
                     ],
                 },
+                {
+                    model: TourSite,
+                    as: 'tourSites',
+                },
                 'images',
-                'tourSites',
                 'departurePlace',
                 'destinationPlace',
+            ],
+            order: [
+                [{ model: TourSite, as: 'tourSites' }, 'day', 'ASC'],
+                [
+                    { model: TourSchedule, as: 'schedules' },
+                    'departureDay',
+                    'ASC',
+                ],
             ],
         });
         res.status(200).json(tour);
@@ -96,11 +107,22 @@ const getTour = async (req, res, next) => {
 
 const getTours = async (req, res, next) => {
     try {
+        const currentDate = new Date();
         const tours = await Tour.findAll({
             attributes: {
                 exclude: ['departurePlaceId', 'destinationPlaceId'],
             },
-            include: ['departurePlace', 'destinationPlace'],
+            include: [
+                'departurePlace',
+                'destinationPlace',
+                {
+                    model: TourSchedule,
+                    as: 'schedules',
+                    order: [['departureDay', 'ASC']],
+                    limit: 1,
+                    required: false,
+                },
+            ],
         });
         res.status(200).json(tours);
     } catch (error) {
@@ -110,17 +132,106 @@ const getTours = async (req, res, next) => {
 
 const updateTour = async (req, res, next) => {
     try {
+        const {
+            typeId,
+            departurePlaceId,
+            destinationPlaceId,
+            tourName,
+            tourProgramDesc,
+            shortDesc,
+            coverImg,
+            numberOfDay,
+            numberOfNight,
+            vehicle,
+            images,
+            sites,
+        } = req.body;
+
+        const update = {
+            typeId: typeId,
+            departurePlaceId: departurePlaceId,
+            destinationPlaceId: destinationPlaceId,
+            tourName: tourName,
+            tourProgramDesc: tourProgramDesc,
+            shortDesc: shortDesc,
+            numberOfDay: numberOfDay,
+            numberOfNight: numberOfNight,
+            vehicle: vehicle,
+        };
+
         const tour = await Tour.findByPk(req.params.id, {
             attributes: {
                 exclude: ['departurePlaceId', 'destinationPlaceId'],
             },
             include: [
-                'images',
+                {
+                    model: TourImg,
+                    as: 'images',
+                    attributes: ['id', 'url'],
+                },
                 'tourSites',
                 'departurePlace',
                 'destinationPlace',
             ],
         });
+
+        if (tour.coverImg !== coverImg) {
+            const fileName = splitFileName(tour.coverImg);
+            deleteImage(fileName);
+
+            const coverImgUpload = await uploadImage(coverImg);
+            update.coverImg = coverImgUpload.secure_url;
+        }
+
+        const existingImageMap = new Map(
+            tour.images.map(image => [image.url, image.id])
+        );
+
+        const newImageUrls = images.filter(url => !existingImageMap.has(url));
+
+        await newImageUrls.map(async image => {
+            const imgUrl = await uploadImage(image);
+            await TourImg.create({
+                tourId: tour.id,
+                url: imgUrl.secure_url,
+            });
+        });
+
+        const deletedImageIds = tour.images.filter(
+            image => !images.includes(image.url)
+        );
+
+        await deletedImageIds.map(async image => {
+            const fileName = splitFileName(image.url);
+            deleteImage(fileName);
+            await TourImg.destroy({
+                where: {
+                    id: image.id,
+                },
+            });
+        });
+
+        await TourSite.destroy({
+            where: {
+                tourId: tour.id,
+            },
+        });
+
+        await sites.map(async site => {
+            await TourSite.create({
+                tourId: tour.id,
+                siteId: +site.siteId,
+                day: site.day,
+            });
+        });
+
+        await Tour.update(update, {
+            where: {
+                id: tour.id,
+            },
+        });
+
+        res.status(200).json({ message: 'Update successfully' });
     } catch (error) {
         next(error);
     }
@@ -184,7 +295,16 @@ const searchToursPagination = async (req, res, next) => {
                         'updatedAt',
                     ],
                 },
-                include: ['departurePlace'],
+                include: [
+                    'departurePlace',
+                    {
+                        model: TourSchedule,
+                        as: 'schedules',
+                        order: [['departureDay', 'ASC']],
+                        limit: 1,
+                        required: false,
+                    },
+                ],
                 limit: limit,
                 offset: offset,
             });

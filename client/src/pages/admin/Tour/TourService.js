@@ -98,6 +98,44 @@ const createTour = async data => {
     }
 };
 
+const updateTour = async data => {
+    try {
+        const {
+            id,
+            typeId,
+            departurePlaceId,
+            destinationPlaceId,
+            tourName,
+            tourProgramDesc,
+            shortDesc,
+            coverImg,
+            numberOfDay,
+            numberOfNight,
+            vehicle,
+            images,
+            sites,
+        } = data;
+        const response = await newRequest.put('/tour/' + id, {
+            typeId,
+            departurePlaceId,
+            destinationPlaceId,
+            tourName,
+            tourProgramDesc,
+            shortDesc,
+            coverImg,
+            numberOfDay,
+            numberOfNight,
+            vehicle,
+            images,
+            sites,
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error update tour:', error);
+        throw error;
+    }
+};
+
 // ! Loại tour
 const getTypeTours = async () => {
     try {
@@ -156,9 +194,10 @@ const deleteTypeTour = async id => {
 export {
     getTours,
     getTour,
+    createTour,
+    updateTour,
     getTypeTour,
     getTypeTours,
-    createTour,
     createTypeTour,
     updateTypeTour,
     deleteTypeTour,

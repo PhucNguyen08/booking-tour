@@ -13,6 +13,8 @@ const NewsDetail = () => {
         queryFn: () => getOneNews(id),
     });
 
+    console.log(query.data);
+
     if (query.isLoading) {
         return <div>Loading...</div>;
     }

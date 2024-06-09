@@ -1,4 +1,4 @@
-const formatPrice = new Intl.NumberFormat('it-IT', {
+const formatPrice = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
 });

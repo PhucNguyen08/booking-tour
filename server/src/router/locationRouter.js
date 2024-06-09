@@ -12,7 +12,7 @@ import { verifyToken, authorizeAdmin } from '../middlewares/auth.js';
 const router = express.Router();
 
 router.get('/', getLocations);
-router.get('/parent/v1', getParentLocations);
+router.get('/parent/list', getParentLocations);
 router.post('/create', verifyToken, authorizeAdmin, createLocation);
 router.get('/:id', getLocation);
 router.put('/:id', verifyToken, authorizeAdmin, updateLocation);

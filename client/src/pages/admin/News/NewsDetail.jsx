@@ -20,48 +20,11 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { Label } from '@/components/ui/label';
 import { transformFile } from '@/utils/uploadImg';
-import ReactQuill from 'react-quill';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-
-const modules = {
-    toolbar: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ font: [] }],
-        [{ size: [] }],
-        [{ color: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ align: [] }],
-        [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            { indent: '-1' },
-            { indent: '+1' },
-        ],
-        ['link', 'image'],
-    ],
-};
-
-const formats = [
-    'header',
-    'font',
-    'size',
-    'color',
-    'align',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-];
+import ReactQuillCustom from '@/components/reactQuill/ReactQuillCustom';
 
 const schema = yup.object({
     title: yup.string().required(),
-    content: yup.string().required(),
 });
 
 const NewsDetail = () => {
@@ -70,6 +33,7 @@ const NewsDetail = () => {
     const { newsId } = useParams();
     const queryClient = useQueryClient();
     const [coverImg, setCoverImg] = useState('');
+    const [content, setContent] = useState();
 
     useEffect(() => {
         if (location.pathname !== '/admin/news/create') {
@@ -86,19 +50,23 @@ const NewsDetail = () => {
     });
 
     const handleGetOneNews = async id => {
-        const response = await getOneNews(id);
-        form.setValue('title', response.title);
-        form.setValue('content', response.content);
-        setCoverImg(response.coverImg);
+        const res = await getOneNews(id);
+        form.setValue('title', res.title);
+        setContent(res.content);
+        setCoverImg(res.coverImg);
     };
 
     const onSubmit = data => {
         if (location.pathname === '/admin/news/create') {
-            const newData = { ...data, coverImg: coverImg };
+            const newData = { ...data, coverImg: coverImg, content: content };
             mutate(newData);
         } else {
-            const updateData = { ...data, coverImg: coverImg, id: newsId };
-            console.log(updateData);
+            const updateData = {
+                ...data,
+                coverImg: coverImg,
+                id: newsId,
+                content: content,
+            };
             mutateUpdate(updateData);
         }
     };
@@ -202,25 +170,10 @@ const NewsDetail = () => {
                                 </div>
                             </div>
                             <div className='col-start-1 col-end-4'>
-                                <FormField
-                                    control={form.control}
-                                    name='content'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Nội dung tin tức
-                                            </FormLabel>
-                                            <FormControl>
-                                                <ReactQuill
-                                                    className='quill w-full'
-                                                    theme='snow'
-                                                    modules={modules}
-                                                    formats={formats}
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
+                                <Label>Nội dung tin tức</Label>
+                                <ReactQuillCustom
+                                    value={content}
+                                    onChange={setContent}
                                 />
                             </div>
                         </div>

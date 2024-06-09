@@ -27,7 +27,11 @@ import { useNavigate } from 'react-router-dom';
 const Banner = () => {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const navigate = useNavigate();
-    const form = useForm();
+    const form = useForm({
+        defaultValues: {
+            departureDay: new Date(),
+        },
+    });
     const queryLocation = useGetLocations();
 
     if (queryLocation.isLoading) {

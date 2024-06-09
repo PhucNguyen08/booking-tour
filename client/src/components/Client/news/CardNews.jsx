@@ -25,7 +25,6 @@ const CardNews = props => {
                         <CalendarDays className='w-4 h-4' />
                         <span>{format(createdAt, 'dd-MM-yyyy')}</span>
                     </div>
-                    <span>{userNews.fullName}</span>
                 </div>
                 <div>
                     <p

@@ -36,13 +36,6 @@ const News = () => {
                         {query.data?.map(item => (
                             <CardNews key={item.id} data={item} />
                         ))}
-
-                        {/* <CardNews />
-                        <CardNews />
-                        <CardNews />
-                        <CardNews />
-                        <CardNews />
-                        <CardNews /> */}
                     </div>
                 </div>
             </Wrapper>

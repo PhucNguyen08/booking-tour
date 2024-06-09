@@ -58,19 +58,19 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.json());
 
-app.use('/auth', authRouter);
-app.use('/site', siteRouter);
-app.use('/location', locationRouter);
-app.use('/tour', tourRouter);
-app.use('/typeTour', typeTourRouter);
-app.use('/users', userRouter);
-app.use('/tourSchedule', tourScheduleRouter);
-app.use('/news', newsRouter);
-app.use('/order', orderRouter);
-app.use('/report', reportRouter);
-app.use('/comment', commentTourRouter);
-app.use('/upload', uploadRouter);
-app.use('/payment', paymentRouter);
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/site', siteRouter);
+app.use('/api/v1/location', locationRouter);
+app.use('/api/v1/tour', tourRouter);
+app.use('/api/v1/typeTour', typeTourRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/tourSchedule', tourScheduleRouter);
+app.use('/api/v1/news', newsRouter);
+app.use('/api/v1/order', orderRouter);
+app.use('/api/v1/report', reportRouter);
+app.use('/api/v1/comment', commentTourRouter);
+app.use('/api/v1/upload', uploadRouter);
+app.use('/api/v1/payment', paymentRouter);
 
 app.listen(PORT, () => {
     connectDb();

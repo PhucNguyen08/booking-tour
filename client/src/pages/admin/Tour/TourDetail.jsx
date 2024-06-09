@@ -39,12 +39,14 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { transformFile, uploadToCloudinary } from '@/utils/uploadImg';
+import { useEffect, useRef, useState } from 'react';
+import { transformFile } from '@/utils/uploadImg';
 import '@/assets/css/ImgQuill.scss';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
-import { createTour, getTour } from './TourService';
+import { createTour, getTour, updateTour } from './TourService';
+import ReactQuillCustom from '@/components/reactQuill/ReactQuillCustom';
+import { BeatLoader } from 'react-spinners';
 
 const modules = {
     toolbar: {
@@ -116,7 +118,7 @@ const TourDetail = () => {
     const [selectSite, setSelectSite] = useState('');
     const [coverImg, setCoverImg] = useState('');
     const [tourImgs, setTourImgs] = useState([]);
-
+    const [content, setContent] = useState();
     const { tourId } = useParams();
     const location = useLocation();
     const queryLocation = useGetLocations();
@@ -124,7 +126,6 @@ const TourDetail = () => {
     const querySite = useGetSites();
     const navigate = useNavigate();
     const inputDayRef = useRef();
-    const reactQuillRef = useRef();
 
     useEffect(() => {
         if (location.pathname !== '/admin/tour/create') {
@@ -146,10 +147,27 @@ const TourDetail = () => {
         name: 'sites',
     });
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: createTour,
         onSuccess: () => {
             toast.success('Bạn đã thêm mới thành công', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+            navigate('/admin/tour/list');
+        },
+    });
+
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useMutation({
+        mutationFn: updateTour,
+        onSuccess: () => {
+            toast.success('Bạn đã sửa thành công', {
                 position: 'top-right',
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -182,19 +200,30 @@ const TourDetail = () => {
                 ...data,
                 departurePlaceId: +data.departurePlaceId,
                 destinationPlaceId: +data.destinationPlaceId,
+                tourProgramDesc: content,
                 typeId: +data.typeId,
                 coverImg: coverImg,
                 images: tourImgs,
             };
             mutate(newData);
-            console.log(newData);
         } else {
-            console.log({ ...data, coverImg: coverImg, images: tourImgs });
+            const updateData = {
+                ...data,
+                coverImg: coverImg,
+                images: tourImgs,
+                departurePlaceId: +data.departurePlaceId,
+                destinationPlaceId: +data.destinationPlaceId,
+                tourProgramDesc: content,
+                typeId: +data.typeId,
+                id: tourId,
+            };
+            mutateUpdate(updateData);
         }
     };
 
     const handleGetTour = async id => {
         const res = await getTour(id);
+        console.log(res.tourSites);
         form.setValue('tourName', res.tourName);
         form.setValue('departurePlaceId', res.departurePlace.id);
         form.setValue('destinationPlaceId', res.destinationPlace.id);
@@ -202,7 +231,6 @@ const TourDetail = () => {
         form.setValue('vehicle', res.vehicle);
         form.setValue('numberOfDay', res.numberOfDay);
         form.setValue('numberOfNight', res.numberOfNight);
-        form.setValue('tourProgramDesc', res.tourProgramDesc);
         form.setValue('shortDesc', res.shortDesc);
         form.setValue(
             'sites',
@@ -211,6 +239,7 @@ const TourDetail = () => {
                 siteId: site.siteId,
             }))
         );
+        setContent(res.tourProgramDesc);
         setCoverImg(res.coverImg);
         setTourImgs(res.images.map(img => img.url));
     };
@@ -263,36 +292,6 @@ const TourDetail = () => {
         updatedImages.splice(index, 1);
         setTourImgs(updatedImages);
     };
-
-    const imageHandler = useCallback(() => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-        input.onchange = async () => {
-            if (input !== null && input.files !== null) {
-                const file = input.files[0];
-                console.log(file);
-                const url = await uploadToCloudinary(file);
-                const quill = reactQuillRef.current;
-                console.log(quill);
-                if (quill) {
-                    const range = quill.getEditorSelection();
-                    console.log(range);
-                    range &&
-                        quill
-                            .getEditor()
-                            .insertEmbed(range.index, 'image', url);
-                    quill
-                        .getEditor()
-                        .root.querySelectorAll('img')
-                        .forEach(img => {
-                            img.setAttribute('class', 'quill-image');
-                        });
-                }
-            }
-        };
-    }, []);
 
     if (
         queryLocation.isLoading ||
@@ -550,76 +549,10 @@ const TourDetail = () => {
                                 />
                             </div>
                             <div className='col-start-1 col-end-4'>
-                                <FormField
-                                    control={form.control}
-                                    name='tourProgramDesc'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Chương trình tour
-                                            </FormLabel>
-                                            <FormControl>
-                                                <ReactQuill
-                                                    // ref={reactQuillRef}
-                                                    className='quill-image'
-                                                    theme='snow'
-                                                    modules={{
-                                                        toolbar: {
-                                                            container: [
-                                                                [
-                                                                    {
-                                                                        header: [
-                                                                            1,
-                                                                            2,
-                                                                            3,
-                                                                            4,
-                                                                            5,
-                                                                            6,
-                                                                            false,
-                                                                        ],
-                                                                    },
-                                                                ],
-                                                                [{ font: [] }],
-                                                                [{ size: [] }],
-                                                                [{ color: [] }],
-                                                                [
-                                                                    'bold',
-                                                                    'italic',
-                                                                    'underline',
-                                                                    'strike',
-                                                                    'blockquote',
-                                                                ],
-                                                                [{ align: [] }],
-                                                                [
-                                                                    {
-                                                                        list: 'ordered',
-                                                                    },
-                                                                    {
-                                                                        list: 'bullet',
-                                                                    },
-                                                                    {
-                                                                        indent: '-1',
-                                                                    },
-                                                                    {
-                                                                        indent: '+1',
-                                                                    },
-                                                                ],
-                                                                [
-                                                                    'link',
-                                                                    'image',
-                                                                ],
-                                                            ],
-                                                            // handlers: {
-                                                            //     image: imageHandler,
-                                                            // },
-                                                        },
-                                                    }}
-                                                    formats={formats}
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
+                                <Label>Chương trình tour</Label>
+                                <ReactQuillCustom
+                                    value={content}
+                                    onChange={setContent}
                                 />
                             </div>
                             <div className='col-start-1 col-end-4'>
@@ -789,6 +722,7 @@ const TourDetail = () => {
                                                     className='w-[150px] h-[150px] object-cover'
                                                 />
                                                 <button
+                                                    type='button'
                                                     onClick={() =>
                                                         handleDeleteImage(i)
                                                     }
@@ -801,7 +735,17 @@ const TourDetail = () => {
                             </div>
                         </div>
                         <div className='text-right pt-6'>
-                            <Button type='submit'>Lưu</Button>
+                            <Button type='submit'>
+                                {isPending || isPendingUpdate ? (
+                                    <BeatLoader
+                                        color='#fff'
+                                        loading={isPending || isPendingUpdate}
+                                        size={10}
+                                    />
+                                ) : (
+                                    'Lưu'
+                                )}
+                            </Button>
                         </div>
                     </form>
                 </Form>

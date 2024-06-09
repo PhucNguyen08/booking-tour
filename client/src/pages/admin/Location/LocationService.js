@@ -22,7 +22,7 @@ const getLocation = async id => {
 
 const getParentLocations = async () => {
     try {
-        const response = await newRequest.get('/location/parent/v1');
+        const response = await newRequest.get('/location/parent/list');
         return response.data;
     } catch (error) {
         console.error('Error fetching locations:', error);
