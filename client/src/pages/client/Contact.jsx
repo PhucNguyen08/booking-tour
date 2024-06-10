@@ -75,7 +75,7 @@ const Contact = () => {
                         </div>
                     </div>
                     <div className='grid grid-cols-1 lg:grid-cols-12 gap-3'>
-                        <div className='p-[15px] border border-solid border-[#E2E6F2] rounded-2xl md:h-[420px] lg:col-span-7 relative'>
+                        <div className='p-[15px] border border-solid border-[#E2E6F2] rounded-2xl h-[420px] lg:col-span-7 relative'>
                             <h3 className='text-black text-[18px] font-bold mb-[5px]'>
                                 Câu hỏi & Giải đáp
                             </h3>

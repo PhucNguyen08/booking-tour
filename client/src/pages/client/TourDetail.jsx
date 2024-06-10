@@ -125,8 +125,8 @@ const TourDetail = props => {
                         <Printer className='ml-2 h-4 w-4' />
                     </Button>
                 </div>
-                <div className='grid grid-cols-12 gap-3'>
-                    <div className='col-span-8'>
+                <div className='grid grid-cols-1 xl:grid-cols-12 gap-3'>
+                    <div className='xl:col-span-8'>
                         <div className='mt-8'>
                             <Swiper
                                 loop={true}
@@ -160,7 +160,7 @@ const TourDetail = props => {
                                             <img
                                                 src={item.url}
                                                 alt={item.url}
-                                                className='h-[89px]'
+                                                className='h-[89px] object-cover'
                                             />
                                         </div>
                                     </SwiperSlide>
@@ -209,7 +209,7 @@ const TourDetail = props => {
                             <Comment tourId={id} />
                         </div>
                     </div>
-                    <div className='col-span-4'>
+                    <div className='xl:col-span-4'>
                         <div className='sticky top-[10px]'>
                             <div className='border border-solid border-[#ccc] p-6 mb-6 mt-8'>
                                 <h3 className='text-blueColor text-sm font-semibold mb-2'>

@@ -14,6 +14,6 @@ router.get('/', verifyToken, authorizeAdmin, getOrders);
 router.get('/:id', verifyToken, getOneOrder);
 router.get('/list/:userId', verifyToken, getOrdersByUser);
 router.post('/create', verifyToken, createOrder);
-router.put('/:id', verifyToken, authorizeAdmin, confirmOrder);
+router.put('/:id', verifyToken, confirmOrder);
 
 export default router;

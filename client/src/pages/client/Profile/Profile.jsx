@@ -10,7 +10,7 @@ const Profile = () => {
             <Breadcrumb label='Thông tin cá nhân' />
             <Wrapper>
                 <div className='py-4'>
-                    <div className='flex gap-8'>
+                    <div className='flex lg:flex-row flex-col gap-8'>
                         <div>
                             <SidebarProfile
                                 links={[

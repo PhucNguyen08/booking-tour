@@ -253,8 +253,13 @@ const deleteTour = async (req, res, next) => {
 
 const searchToursPagination = async (req, res, next) => {
     try {
-        const { departurePlaceId, destinationPlaceId, typeId, departureDay } =
-            req.body;
+        const {
+            departurePlaceId,
+            destinationPlaceId,
+            typeId,
+            departureDay,
+            sort,
+        } = req.body;
 
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.pageSize) || 10;
@@ -308,6 +313,21 @@ const searchToursPagination = async (req, res, next) => {
                 limit: limit,
                 offset: offset,
             });
+
+            sort &&
+                toursAll.sort((a, b) => {
+                    const aPriceAdult = a.schedules[0]
+                        ? a.schedules[0].adultPrice
+                        : 0;
+                    const bPriceAdult = b.schedules[0]
+                        ? b.schedules[0].adultPrice
+                        : 0;
+
+                    return sort === 'priceAsc'
+                        ? aPriceAdult - bPriceAdult
+                        : bPriceAdult - aPriceAdult;
+                });
+
             return res.status(200).json({
                 tours: toursAll,
                 totalTours: totalTours,
@@ -330,11 +350,15 @@ const searchToursPagination = async (req, res, next) => {
                 {
                     model: TourSchedule,
                     as: 'schedules',
-                    where: {
-                        departureDay: {
-                            [Op.eq]: departureDay,
-                        },
-                    },
+                    where: departureDay
+                        ? {
+                              departureDay: {
+                                  [Op.eq]: departureDay,
+                              },
+                          }
+                        : {},
+                    order: [['departureDay', 'ASC']],
+                    limit: 1,
                     required: false,
                 },
                 'departurePlace',
@@ -342,6 +366,20 @@ const searchToursPagination = async (req, res, next) => {
             limit: limit,
             offset: offset,
         });
+
+        sort &&
+            tours.sort((a, b) => {
+                const aPriceAdult = a.schedules[0]
+                    ? a.schedules[0].adultPrice
+                    : 0;
+                const bPriceAdult = b.schedules[0]
+                    ? b.schedules[0].adultPrice
+                    : 0;
+
+                return sort === 'priceAsc'
+                    ? aPriceAdult - bPriceAdult
+                    : bPriceAdult - aPriceAdult;
+            });
 
         res.status(200).json({
             tours: tours,

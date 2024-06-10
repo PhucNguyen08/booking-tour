@@ -13,6 +13,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import CardTour from '@/components/Client/tour/CardTour';
+import CardTourSkeleton from '@/components/Client/tour/CardTourSkeleton';
 import { useForm } from 'react-hook-form';
 import PaginationSection from '@/components/paginationSection/PaginationSection';
 import { searchTour } from './ListTourService';
@@ -23,32 +24,62 @@ import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 
 const ListTour = () => {
-    const [sortType, setSortType] = useState('default');
     const [currentPage, setCurrentPage] = useState(1);
     const form = useForm();
-    const [searchParams] = useSearchParams();
+    const [search, setSearch] = useSearchParams();
     const queryLocation = useGetLocations();
     const query = useQuery({
-        queryKey: ['list-tour', currentPage],
+        queryKey: [
+            'list-tour',
+            currentPage,
+            search.get('sort'),
+            search.get('type'),
+            search.get('departure'),
+            search.get('destination'),
+            search.get('departureDay'),
+        ],
         queryFn: () =>
             searchTour(
                 {
-                    typeId: searchParams.get('type') || null,
-                    departurePlaceId: searchParams.get('departure') || null,
-                    destinationPlaceId: searchParams.get('destination') || null,
-                    departureDay: searchParams.get('departureDay') || null,
+                    typeId: search.get('type') || null,
+                    departurePlaceId: search.get('departure') || null,
+                    destinationPlaceId: search.get('destination') || null,
+                    departureDay: search.get('departureDay') || null,
+                    sort: search.get('sort') || null,
                 },
                 currentPage,
                 6
             ),
     });
 
-    if (queryLocation.isLoading || query.isLoading) {
-        return <div>Loading...</div>;
+    if (queryLocation.isLoading) {
+        return <div className='hidden'>Loading...</div>;
     }
 
     const onSubmit = data => {
-        console.log(data);
+        if (data.departurePlace) {
+            search.set('departure', data.departurePlace);
+        }
+        if (data.typeTour) {
+            search.set('type', data.typeTour);
+        }
+        if (data.destinationPlace) {
+            search.set('destination', data.destinationPlace);
+        }
+        setSearch(search, {
+            replace: false,
+        });
+    };
+
+    const handleSort = value => {
+        if (value === 'default') {
+            search.delete('sort');
+        } else {
+            search.set('sort', value);
+        }
+        setSearch(search, {
+            replace: false,
+        });
     };
 
     return (
@@ -199,8 +230,8 @@ const ListTour = () => {
                         <div className='flex justify-end items-center border-t border-solid border-[#E2E6F2] py-4'>
                             <span className='pr-2'>Sắp xếp theo</span>
                             <Select
-                                onValueChange={setSortType}
-                                defaultValue={sortType}>
+                                onValueChange={handleSort}
+                                defaultValue={'default'}>
                                 <SelectTrigger className='w-full xl:w-[150px] focus:ring-transparent'>
                                     <SelectValue />
                                 </SelectTrigger>
@@ -218,15 +249,19 @@ const ListTour = () => {
                             </Select>
                         </div>
                         <div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
-                            {query.data.tours.map(item => (
-                                <CardTour tour={item} key={item.id} />
-                            ))}
+                            {!query.isLoading
+                                ? query.data.tours.map(item => (
+                                      <CardTour tour={item} key={item.id} />
+                                  ))
+                                : Array.from({ length: 6 }, (v, i) => (
+                                      <CardTourSkeleton key={i} />
+                                  ))}
                         </div>
                         <div className='py-4'>
                             <PaginationSection
                                 currentPage={currentPage}
                                 setCurrentPage={setCurrentPage}
-                                totalItems={query.data.totalTours}
+                                totalItems={query.data?.totalTours}
                                 itemPerPage={6}
                             />
                         </div>

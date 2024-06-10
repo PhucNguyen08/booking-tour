@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { getOneNews } from '@/pages/admin/News/NewsService';
 import { useQuery } from '@tanstack/react-query';
+import { Clock5 } from 'lucide-react';
+import { format } from 'date-fns';
 
 const NewsDetail = () => {
     const { id } = useParams();
@@ -27,6 +29,10 @@ const NewsDetail = () => {
                     <h3 className='mb-[10px] font-semibold text-[25px]'>
                         {query.data.title}
                     </h3>
+                    <span className='flex gap-2 items-center text-[#acacac] text-sm'>
+                        <Clock5 className='w-4 h-4' />
+                        {format(query.data.createdAt, 'dd/MM/yyyy')}
+                    </span>
                     <Separator className='my-4' />
                     <div
                         className='content-news'

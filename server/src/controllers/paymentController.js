@@ -186,42 +186,7 @@ const createPayment = async item => {
 const callback = async (req, res, next) => {
     console.log('callback: ');
     console.log(req.body);
-    if (req.body.resultCode === 0) {
-        const oneOrder = await Order.update(
-            {
-                status: 'confirm',
-            },
-            {
-                where: {
-                    id: req.body.orderId,
-                },
-            }
-        );
 
-        const order = await Order.findByPk(req.body.orderId);
-
-        await TourSchedule.update(
-            {
-                numberOfParticipantsBooked:
-                    order.dataValues.numberOfChild +
-                    order.dataValues.numberOfAdult,
-            },
-            {
-                where: {
-                    id: order.dataValues.tourScheduleId,
-                },
-            }
-        );
-
-        const options = {
-            from: 'npnguyen6868@gmail.com',
-            to: 'npnguyen812@gmail.com',
-            subject: 'Đơn xác nhận đặt tour du lịch',
-            html: req.body.detail,
-        };
-
-        await transporter.sendMail(options);
-    }
     /**
    * Dựa vào kết quả này để update trạng thái đơn hàng
    * Kết quả log:

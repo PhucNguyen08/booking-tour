@@ -21,7 +21,7 @@ const Home = () => {
     const query = useGetTours();
 
     if (query.isLoading) {
-        return <div>Loading...</div>;
+        return <div className='hidden'>Loading...</div>;
     }
 
     return (
@@ -202,14 +202,20 @@ const Home = () => {
                     </p>
                     <div>
                         <Swiper
-                            slidesPerView={4}
+                            slidesPerView={1}
                             spaceBetween={30}
                             navigation={true}
                             breakpoints={{
-                                768: {
-                                    slidesPerView: 1,
+                                640: {
+                                    slidesPerView: 2,
                                 },
-                                1024: {
+                                768: {
+                                    slidesPerView: 2,
+                                },
+                                992: {
+                                    slidesPerView: 3,
+                                },
+                                1200: {
                                     slidesPerView: 4,
                                 },
                             }}

@@ -27,12 +27,12 @@ const dataListSort = [
         value: 'default',
     },
     {
-        name: 'A → Z',
-        value: 'a-asc',
+        name: 'Giá thấp đến cao nhất',
+        value: 'priceAsc',
     },
     {
-        name: 'Z → A',
-        value: 'a-desc',
+        name: 'Giá cao đến thấp nhất',
+        value: 'priceDesc',
     },
 ];
 

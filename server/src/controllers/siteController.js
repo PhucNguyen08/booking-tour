@@ -2,7 +2,9 @@ import { Site } from '../models/index.js';
 
 const getSites = async (req, res, next) => {
     try {
-        const sites = await Site.findAll({ include: 'location' });
+        const sites = await Site.findAll({
+            include: 'location',
+        });
 
         const valueSites = sites.map(location => location.dataValues);
 

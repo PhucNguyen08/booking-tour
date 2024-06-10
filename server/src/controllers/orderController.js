@@ -13,6 +13,21 @@ const createOrder = async (req, res, next) => {
             clients,
             paymentMethod,
         } = req.body;
+
+        const tourSchedule = await TourSchedule.findByPk(tourScheduleId);
+
+        if (
+            tourSchedule.maxParticipants -
+                tourSchedule.numberOfParticipantsBooked -
+                numberOfChild -
+                numberOfAdult <
+            0
+        ) {
+            return res
+                .status(404)
+                .send({ message: 'Số lượng đặt vượt quá số chỗ còn lại' });
+        }
+
         const order = await Order.create({
             tourScheduleId,
             userId: +req.userId,
@@ -127,11 +142,22 @@ const confirmOrder = async (req, res, next) => {
 
         const order = await Order.findByPk(req.params.id);
 
+        const tourSchedule = await TourSchedule.findByPk(
+            order.dataValues.tourScheduleId
+        );
+
+        const totalParticipants =
+            order.dataValues.numberOfChild + order.dataValues.numberOfAdult;
+        const availableParticipants =
+            tourSchedule.dataValues.maxParticipants - totalParticipants;
+
         await TourSchedule.update(
             {
-                numberOfParticipantsBooked:
-                    order.dataValues.numberOfChild +
-                    order.dataValues.numberOfAdult,
+                numberOfParticipantsBooked: totalParticipants,
+                status:
+                    availableParticipants === 0
+                        ? 'full'
+                        : tourSchedule.dataValues.status,
             },
             {
                 where: {

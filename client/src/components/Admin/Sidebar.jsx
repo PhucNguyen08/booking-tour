@@ -140,13 +140,7 @@ const Sidebar = () => {
                         isChildren: true,
                         children: [
                             {
-                                title: 'Danh sách quản trị',
-                                href: '/admin/list',
-                                icon: Minus,
-                                variant: 'ghost',
-                            },
-                            {
-                                title: 'Danh sách khách hàng',
+                                title: 'Khách hàng',
                                 href: '/admin/users',
                                 icon: Minus,
                                 variant: 'ghost',

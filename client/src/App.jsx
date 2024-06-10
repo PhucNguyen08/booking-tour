@@ -31,7 +31,7 @@ import ProfileInfo from './pages/client/Profile/ProfileInfo';
 import ProfileChangeInfo from './pages/client/Profile/ProfileChangeInfo';
 import ProfileBooking from './pages/client/Profile/ProfileBooking';
 import NotFound from './pages/NotFound';
-// import PrivateRoutes from './utils/PrivateRoutes';
+import { PrivateAdminRoutes, PrivateClientRoutes } from './utils/PrivateRoutes';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -53,20 +53,25 @@ function App() {
                             path='order/success'
                             element={<OrderSuccess />}
                         />
-                        <Route path='user' element={<Profile />}>
-                            <Route path='profile' element={<ProfileInfo />} />
-                            <Route
-                                path='change-password'
-                                element={<ChangePassword />}
-                            />
-                            <Route
-                                path='my-booking'
-                                element={<ProfileBooking />}
-                            />
-                            <Route
-                                path='change-information'
-                                element={<ProfileChangeInfo />}
-                            />
+                        <Route element={<PrivateClientRoutes />}>
+                            <Route path='user' element={<Profile />}>
+                                <Route
+                                    path='profile'
+                                    element={<ProfileInfo />}
+                                />
+                                <Route
+                                    path='change-password'
+                                    element={<ChangePassword />}
+                                />
+                                <Route
+                                    path='my-booking'
+                                    element={<ProfileBooking />}
+                                />
+                                <Route
+                                    path='change-information'
+                                    element={<ProfileChangeInfo />}
+                                />
+                            </Route>
                         </Route>
                         <Route path='news' element={<News />} />
                         <Route path='news/:id' element={<NewsDetail />} />
@@ -76,38 +81,45 @@ function App() {
                             element={<TourDetail />}
                         />
                     </Route>
-
-                    <Route path='admin' element={<AdminLayout />}>
-                        <Route index element={<Dashboard />} />
-                        <Route path='site' element={<Site />} />
-                        <Route path='location' element={<Location />} />
-                        <Route path='tour/create' element={<TourCreate />} />
-                        <Route
-                            path='tour/edit/:tourId'
-                            element={<TourCreate />}
-                        />
-                        <Route
-                            path='tour/schedule'
-                            element={<TourSchedule />}
-                        />
-                        <Route path='tour/list' element={<TourList />} />
-                        <Route path='tour/client' element={<ClientTour />} />
-                        <Route
-                            path='tour/client/:id'
-                            element={<ClientTour />}
-                        />
-                        <Route path='type-tour' element={<TypeTour />} />
-                        <Route path='news/list' element={<NewsAdmin />} />
-                        <Route
-                            path='news/create'
-                            element={<NewsDetailAdmin />}
-                        />
-                        <Route
-                            path='news/:newsId'
-                            element={<NewsDetailAdmin />}
-                        />
-                        <Route path='order' element={<Order />} />
-                        <Route path='users' element={<Users />} />
+                    <Route element={<PrivateAdminRoutes />}>
+                        <Route path='admin' element={<AdminLayout />}>
+                            <Route index element={<Dashboard />} />
+                            <Route path='site' element={<Site />} />
+                            <Route path='location' element={<Location />} />
+                            <Route
+                                path='tour/create'
+                                element={<TourCreate />}
+                            />
+                            <Route
+                                path='tour/edit/:tourId'
+                                element={<TourCreate />}
+                            />
+                            <Route
+                                path='tour/schedule'
+                                element={<TourSchedule />}
+                            />
+                            <Route path='tour/list' element={<TourList />} />
+                            <Route
+                                path='tour/client'
+                                element={<ClientTour />}
+                            />
+                            <Route
+                                path='tour/client/:id'
+                                element={<ClientTour />}
+                            />
+                            <Route path='type-tour' element={<TypeTour />} />
+                            <Route path='news/list' element={<NewsAdmin />} />
+                            <Route
+                                path='news/create'
+                                element={<NewsDetailAdmin />}
+                            />
+                            <Route
+                                path='news/:newsId'
+                                element={<NewsDetailAdmin />}
+                            />
+                            <Route path='order' element={<Order />} />
+                            <Route path='users' element={<Users />} />
+                        </Route>
                     </Route>
                     <Route path='admin/login' element={<Login />} exact />
                     <Route path='*' element={<NotFound />} />
