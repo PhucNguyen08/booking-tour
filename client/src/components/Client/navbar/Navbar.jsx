@@ -152,7 +152,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <Link
-                                to={'/auth/login'}
+                                to={'/login'}
                                 className='flex items-center gap-2 hover:bg-slate-100 p-2 rounded-lg group'>
                                 <img
                                     src={Ava}

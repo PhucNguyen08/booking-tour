@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Wrapper from '@/components/Client/wrapper/Wrapper';
 import { Card } from '@/components/ui/card';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -27,7 +27,10 @@ const schema = yup.object({
             /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
             'Số điện thoại không hợp lệ'
         ),
-    password: yup.string().required(),
+    password: yup
+        .string()
+        .required('Vui lòng nhập mật khẩu')
+        .min(6, 'Mật khẩu 6 ký tự trở lên.'),
 });
 
 const defaultValues = {
@@ -37,6 +40,7 @@ const defaultValues = {
 
 const LoginClient = () => {
     const { setUser } = useContext(UserContext);
+    const [error, setError] = useState();
 
     const navigate = useNavigate();
     const { mutate } = useMutation({
@@ -46,7 +50,12 @@ const LoginClient = () => {
             navigate('/');
         },
         onError: err => {
-            console.log(err);
+            if (err.response.status === 404) {
+                setError('Tài khoản không chính xác');
+            }
+            if (err.response.status === 400) {
+                setError('Tài khoản hoặc mật khẩu không đúng');
+            }
         },
     });
 
@@ -102,6 +111,9 @@ const LoginClient = () => {
                                             </FormItem>
                                         )}
                                     />
+                                    {error && (
+                                        <p className='text-red-600'>{error}</p>
+                                    )}
                                     <div className='text-center'>
                                         <Button type='submit'>Đăng nhập</Button>
                                     </div>
@@ -109,12 +121,14 @@ const LoginClient = () => {
                             </Form>
                         </div>
                         <div className='flex justify-between'>
-                            <span>Quên mật khẩu ?</span>
+                            <span>
+                                <Link to='/forgot-password'>
+                                    Quên mật khẩu?
+                                </Link>
+                            </span>
                             <span>
                                 Bạn không có tài khoản?{' '}
-                                <Link
-                                    to='/auth/register'
-                                    className='text-blueColor'>
+                                <Link to='/register' className='text-blueColor'>
                                     Đăng ký
                                 </Link>
                             </span>

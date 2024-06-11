@@ -30,7 +30,9 @@ const ClientTour = createLazyComponent(
     import('@/pages/admin/ClientTour/ClientTourIndex')
 );
 const LoginClient = createLazyComponent(import('@/pages/client/Login'));
-const RegisterClient = createLazyComponent(import('@/pages/client/Register'));
+const RegisterClient = createLazyComponent(
+    import('@/pages/client/Auth/Register')
+);
 const ListTour = createLazyComponent(
     import('@/pages/client/ListTour/ListTourIndex')
 );

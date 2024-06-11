@@ -15,8 +15,8 @@ import TourSchedule from './pages/admin/Tour/TourSchedule';
 import NewsAdmin from './pages/admin/News/NewsIndex';
 import NewsDetailAdmin from './pages/admin/News/NewsDetail';
 import ClientTour from './pages/admin/ClientTour/ClientTourIndex';
-import LoginClient from './pages/client/Login';
-import RegisterClient from './pages/client/Register';
+import LoginClient from './pages/client/Auth/Login';
+import RegisterClient from './pages/client/Auth/Register';
 import ListTour from './pages/client/ListTour/ListTourIndex';
 import TourDetail from './pages/client/TourDetail';
 import Introduce from './pages/client/Introduce';
@@ -30,6 +30,8 @@ import ChangePassword from './pages/client/Profile/ChangePassword';
 import ProfileInfo from './pages/client/Profile/ProfileInfo';
 import ProfileChangeInfo from './pages/client/Profile/ProfileChangeInfo';
 import ProfileBooking from './pages/client/Profile/ProfileBooking';
+import ForgotPassword from './pages/client/Auth/ForgotPassword';
+import ResetPassword from './pages/client/Auth/ResetPassword';
 import NotFound from './pages/NotFound';
 import { PrivateAdminRoutes, PrivateClientRoutes } from './utils/PrivateRoutes';
 import { ToastContainer } from 'react-toastify';
@@ -41,10 +43,15 @@ function App() {
                 <Routes>
                     <Route path='/' element={<ClientLayout />}>
                         <Route index element={<Home />} />
-                        <Route path='auth/login' element={<LoginClient />} />
+                        <Route path='login' element={<LoginClient />} />
+                        <Route path='register' element={<RegisterClient />} />
                         <Route
-                            path='auth/register'
-                            element={<RegisterClient />}
+                            path='forgot-password'
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path='reset-password'
+                            element={<ResetPassword />}
                         />
                         <Route path='introduce' element={<Introduce />} />
                         <Route path='contact' element={<Contact />} />

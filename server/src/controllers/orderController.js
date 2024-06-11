@@ -2,6 +2,8 @@ import { Order, User, TourSchedule, OrderDetail } from '../models/index.js';
 import { createPayment } from './paymentController.js';
 import bcrypt from 'bcryptjs';
 import transporter from '../email/email.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const createOrder = async (req, res, next) => {
     try {
@@ -167,7 +169,7 @@ const confirmOrder = async (req, res, next) => {
         );
 
         const options = {
-            from: 'npnguyen6868@gmail.com',
+            from: process.env.EMAIL_LOGIN,
             to: 'npnguyen812@gmail.com',
             subject: 'Đơn xác nhận đặt tour du lịch',
             html: req.body.detail,
@@ -175,8 +177,6 @@ const confirmOrder = async (req, res, next) => {
 
         await transporter.sendMail(options);
         console.log('Email sent successfully');
-
-        res.status(200).json(oneOrder);
     } catch (error) {
         next(error);
     }

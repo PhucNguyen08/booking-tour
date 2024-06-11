@@ -184,9 +184,7 @@ const RegisterClient = () => {
                         <div className='flex justify-between'>
                             <span>
                                 Bạn đã có tài khoản?{' '}
-                                <Link
-                                    to='/auth/login'
-                                    className='text-blueColor'>
+                                <Link to='/login' className='text-blueColor'>
                                     Đăng nhập
                                 </Link>
                             </span>
