@@ -54,7 +54,7 @@ const RegisterClient = () => {
                 progress: undefined,
                 theme: 'light',
             });
-            navigate('/auth/login');
+            navigate('/login');
         },
         onError: err => {
             console.log(err);

@@ -34,6 +34,8 @@ const customStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         minWidth: '1000px',
+        maxHeight: '500px',
+        overflowY: 'scroll',
     },
     overlay: {
         backgroundColor: 'rgba(49,49,49,0.8)',
@@ -75,6 +77,7 @@ const Order = () => {
                 queryKey: ['orders'],
                 exact: true,
             });
+
             closeModal();
         } catch (error) {
             console.log(error);
@@ -84,6 +87,11 @@ const Order = () => {
     };
 
     const columns = [
+        {
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
+        },
         {
             accessorKey: 'id',
             header: 'Mã đơn đặt',
@@ -126,7 +134,12 @@ const Order = () => {
             header: 'Trạng thái',
             cell: ({ row }) => {
                 return (
-                    <div className='truncate'>
+                    <div
+                        className={`truncate p-2 text-center rounded text-white ${
+                            row.getValue('status') === 'waiting'
+                                ? 'bg-black dark:bg-slate-600'
+                                : 'bg-blueColor'
+                        }`}>
                         {row.getValue('status') === 'waiting'
                             ? 'Chờ xác nhận'
                             : 'Đã xác nhận'}
@@ -151,7 +164,7 @@ const Order = () => {
     ];
 
     if (query.isLoading || queryDetail.isLoading) {
-        return <div>Loading...</div>;
+        return <div className='hidden'>Loading...</div>;
     }
 
     const handleDetail = async id => {

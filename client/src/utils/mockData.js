@@ -36,6 +36,29 @@ const dataListSort = [
     },
 ];
 
+const dataSelectPrice = [
+    {
+        name: 'Tất cả',
+        value: 'default',
+    },
+    {
+        name: 'Dưới 3 triệu',
+        value: '0-3000000',
+    },
+    {
+        name: 'Từ 3 triệu - 6 triệu',
+        value: '3000000-6000000',
+    },
+    {
+        name: 'Từ 6 triệu - 9 triệu',
+        value: '6000000-9000000',
+    },
+    {
+        name: 'Trên 9 triệu',
+        value: '9000000',
+    },
+];
+
 const dataQuestionsAndAnswers = [
     {
         question: 'Điều kiện đăng ký tour như thế nào?',
@@ -57,7 +80,7 @@ const dataQuestionsAndAnswers = [
     {
         question:
             'Tôi có thể thanh toán tiền mặt ở đâu? Có cần phải đến công ty không?',
-        answer: 'Với trường hợp thanh toán bằng tiền mặt hoặc cà thẻ ngân hàng, quý khách có thể thanh toán tại Trụ sở chính: 190 Tòa nhà Ladeco, 266 Đội Cấn, Ba Đình, Hà Nội hoặc bất kì Văn phòng nào của OH Travel. Hiện tại, Du ND Travel đang có 04 văn phòng bán lẻ tại các quận thành phố Hà Nội và Hồ Chí Minh và các chi nhánh tại các tỉnh thành Việt Nam.',
+        answer: 'Với trường hợp thanh toán bằng tiền mặt hoặc cà thẻ ngân hàng, quý khách có thể thanh toán tại Trụ sở chính: 190 Tòa nhà Ladeco, 266 Đội Cấn, Ba Đình, Hà Nội hoặc bất kì Văn phòng nào của OH Travel. Hiện tại, OH Travel đang có 04 văn phòng bán lẻ tại các quận thành phố Hà Nội và Hồ Chí Minh và các chi nhánh tại các tỉnh thành Việt Nam.',
     },
     {
         question:
@@ -66,4 +89,4 @@ const dataQuestionsAndAnswers = [
     },
 ];
 
-export { dataNav, dataListSort, dataQuestionsAndAnswers };
+export { dataNav, dataListSort, dataQuestionsAndAnswers, dataSelectPrice };

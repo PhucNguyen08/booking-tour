@@ -67,8 +67,13 @@ const TourSchedule = () => {
 
     const columns = [
         {
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
+        },
+        {
             accessorKey: 'id',
-            header: 'Mã lịch trình tour',
+            header: 'Mã tour ngày',
         },
         {
             accessorKey: 'tourId',
@@ -112,7 +117,7 @@ const TourSchedule = () => {
                             variant='secondary'
                             onClick={() =>
                                 handleDetail(
-                                    row.getValue('id'),
+                                    row.original.id,
                                     row.original.tourSchedule?.tourName,
                                     row.getValue('departureDay')
                                 )
@@ -148,7 +153,7 @@ const TourSchedule = () => {
                 <DataTable
                     columns={columns}
                     data={query?.data || []}
-                    placeholderFilter={'mã lịch trình tour'}
+                    placeholderFilter={'mã tour ngày'}
                     filter={'id'}
                 />
             </div>

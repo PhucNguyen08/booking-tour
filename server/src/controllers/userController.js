@@ -90,8 +90,10 @@ const updateUser = async (req, res, next) => {
 
         const user = await User.findByPk(req.params.id);
         if (user.avatar !== avatar) {
-            const fileName = splitFileName(user.avatar);
-            deleteImage(fileName);
+            if (user.avatar !== null) {
+                const fileName = splitFileName(user.avatar);
+                deleteImage(fileName);
+            }
 
             const avatarUpload = await uploadImage(avatar);
             update.avatar = avatarUpload.secure_url;

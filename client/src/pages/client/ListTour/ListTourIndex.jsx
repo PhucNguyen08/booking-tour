@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Breadcrumb from '@/components/Client/breadcrumb/Breadcrumb';
 import Wrapper from '@/components/Client/wrapper/Wrapper';
-import { dataListSort } from '@/utils/mockData';
+import { dataListSort, dataSelectPrice } from '@/utils/mockData';
 import {
     Select,
     SelectContent,
@@ -17,7 +17,7 @@ import CardTourSkeleton from '@/components/Client/tour/CardTourSkeleton';
 import { useForm } from 'react-hook-form';
 import PaginationSection from '@/components/paginationSection/PaginationSection';
 import { searchTour } from './ListTourService';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FormField, Form } from '@/components/ui/form';
 import { useGetLocations } from '@/hooks/useFetch';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,7 @@ import { useQuery } from '@tanstack/react-query';
 const ListTour = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const form = useForm();
+    const navigate = useNavigate();
     const [search, setSearch] = useSearchParams();
     const queryLocation = useGetLocations();
     const query = useQuery({
@@ -37,6 +38,7 @@ const ListTour = () => {
             search.get('departure'),
             search.get('destination'),
             search.get('departureDay'),
+            search.get('priceRange'),
         ],
         queryFn: () =>
             searchTour(
@@ -46,6 +48,7 @@ const ListTour = () => {
                     destinationPlaceId: search.get('destination') || null,
                     departureDay: search.get('departureDay') || null,
                     sort: search.get('sort') || null,
+                    priceRange: search.get('priceRange') || null,
                 },
                 currentPage,
                 6
@@ -57,15 +60,29 @@ const ListTour = () => {
     }
 
     const onSubmit = data => {
-        if (data.departurePlace) {
-            search.set('departure', data.departurePlace);
+        if (
+            !(
+                data.departurePlace ||
+                data.destinationPlace ||
+                data.typeTour ||
+                data.priceRange
+            )
+        ) {
+            navigate('/tour/all');
+            return;
         }
-        if (data.typeTour) {
-            search.set('type', data.typeTour);
+
+        if (data.priceRange === 'default') {
+            search.delete('priceRange');
+        } else if (data.priceRange) {
+            search.set('priceRange', data.priceRange);
         }
-        if (data.destinationPlace) {
+
+        data.departurePlace && search.set('departure', data.departurePlace);
+        data.typeTour && search.set('type', data.typeTour);
+        data.destinationPlace &&
             search.set('destination', data.destinationPlace);
-        }
+
         setSearch(search, {
             replace: false,
         });
@@ -117,9 +134,27 @@ const ListTour = () => {
                                                                     Chọn nơi
                                                                     khởi hành
                                                                 </SelectLabel>
-                                                                <SelectItem value='6'>
-                                                                    Hà Nội
-                                                                </SelectItem>
+                                                                {queryLocation.data?.map(
+                                                                    item => {
+                                                                        if (
+                                                                            item.locationName !==
+                                                                            'Việt Nam'
+                                                                        ) {
+                                                                            return (
+                                                                                <SelectItem
+                                                                                    key={
+                                                                                        item.id
+                                                                                    }
+                                                                                    value={item.id.toString()}>
+                                                                                    {
+                                                                                        item.locationName
+                                                                                    }
+                                                                                </SelectItem>
+                                                                            );
+                                                                        }
+                                                                        return null;
+                                                                    }
+                                                                )}
                                                             </SelectGroup>
                                                         </SelectContent>
                                                     </Select>
@@ -206,6 +241,47 @@ const ListTour = () => {
                                                 )}
                                             />
                                         </div>
+                                        <div className='flex flex-col gap-3'>
+                                            <label>Khoảng giá</label>
+                                            <FormField
+                                                control={form.control}
+                                                name='priceRange'
+                                                render={({ field }) => (
+                                                    <Select
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                        value={field.value}>
+                                                        <SelectTrigger className='w-full focus:ring-transparent'>
+                                                            <SelectValue placeholder='Chọn khoảng giá' />
+                                                        </SelectTrigger>
+                                                        <SelectContent className='overflow-y-auto max-h-[10rem]'>
+                                                            <SelectGroup>
+                                                                <SelectLabel>
+                                                                    Chọn khoảng
+                                                                    giá
+                                                                </SelectLabel>
+                                                                {dataSelectPrice.map(
+                                                                    item => (
+                                                                        <SelectItem
+                                                                            value={
+                                                                                item.value
+                                                                            }
+                                                                            key={
+                                                                                item.value
+                                                                            }>
+                                                                            {
+                                                                                item.name
+                                                                            }
+                                                                        </SelectItem>
+                                                                    )
+                                                                )}
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                )}
+                                            />
+                                        </div>
                                         <Button
                                             type='submit'
                                             variant='ghost'
@@ -249,13 +325,21 @@ const ListTour = () => {
                             </Select>
                         </div>
                         <div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
-                            {!query.isLoading
-                                ? query.data.tours.map(item => (
-                                      <CardTour tour={item} key={item.id} />
-                                  ))
-                                : Array.from({ length: 6 }, (v, i) => (
-                                      <CardTourSkeleton key={i} />
-                                  ))}
+                            {!query.isLoading ? (
+                                query.data.tours.length === 0 ? (
+                                    <p className='text-center col-span-3'>
+                                        Không có kết quả tìm kiếm !
+                                    </p>
+                                ) : (
+                                    query.data.tours.map(item => (
+                                        <CardTour tour={item} key={item.id} />
+                                    ))
+                                )
+                            ) : (
+                                Array.from({ length: 6 }, (v, i) => (
+                                    <CardTourSkeleton key={i} />
+                                ))
+                            )}
                         </div>
                         <div className='py-4'>
                             <PaginationSection

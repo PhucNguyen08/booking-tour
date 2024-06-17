@@ -21,7 +21,7 @@ const Home = () => {
     const query = useGetTours();
 
     if (query.isLoading) {
-        return <div className='hidden'>Loading...</div>;
+        return <div className='hidden'>Loading</div>;
     }
 
     return (

@@ -62,6 +62,7 @@ const defaultValues = {
     adultPrice: 0,
     maxParticipants: 0,
     numberOfParticipantsBooked: 0,
+    status: 'still',
 };
 
 const TourSchedule = () => {
@@ -192,8 +193,13 @@ const TourSchedule = () => {
 
     const columns = [
         {
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
+        },
+        {
             accessorKey: 'id',
-            header: 'Id',
+            header: 'Mã tour ngày',
         },
         {
             accessorKey: 'tourId',
@@ -201,12 +207,7 @@ const TourSchedule = () => {
             cell: ({ row }) => {
                 return (
                     <div className='truncate'>
-                        {
-                            queryTours.data?.find(
-                                tour =>
-                                    tour.id === Number(row.getValue('tourId'))
-                            )?.tourName
-                        }
+                        {row.original.tourSchedule?.tourName}
                     </div>
                 );
             },
@@ -255,7 +256,7 @@ const TourSchedule = () => {
     ];
 
     if (queryTours.isLoading) {
-        <div>Loading...</div>;
+        <div className='hidden'>Loading...</div>;
     }
 
     return (
@@ -265,8 +266,8 @@ const TourSchedule = () => {
                 <DataTable
                     columns={columns}
                     data={query?.data || []}
-                    placeholderFilter={'Tên tour'}
-                    filter={'tourId'}
+                    placeholderFilter={'Mã tour ngày'}
+                    filter={'id'}
                     onClick={handleAdd}
                 />
                 {query.isLoading && <div>Loading...</div>}

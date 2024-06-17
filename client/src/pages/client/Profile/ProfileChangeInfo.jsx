@@ -20,6 +20,7 @@ import { updateProfile } from './ProfileService';
 import { toast } from 'react-toastify';
 import { transformFile } from '@/utils/uploadImg';
 import { BeatLoader } from 'react-spinners';
+import { NoAvatar } from '@/utils/img';
 
 const schema = yup.object({
     fullName: yup.string().required('Vui lòng nhập dữ liệu'),
@@ -96,7 +97,7 @@ const ProfileChangeInfo = () => {
                     <div className='grid gap-4 grid-cols-12'>
                         <div className='col-span-12 flex flex-col gap-4 items-center justify-center'>
                             <img
-                                src={avatar}
+                                src={avatar ? avatar : NoAvatar}
                                 alt='avatar'
                                 className='w-32 h-32 object-cover'
                             />
@@ -171,7 +172,7 @@ const ProfileChangeInfo = () => {
                             />
                         </div>
                         <div className='col-span-3 flex items-center'>
-                            <span>Ngày sinh</span>
+                            <span>Ngày sinh (*)</span>
                         </div>
                         <div className='col-span-9'>
                             <FormField
@@ -182,7 +183,7 @@ const ProfileChangeInfo = () => {
                                         <FormControl>
                                             <Input
                                                 className='focus-visible:ring-offset-0 focus-visible:ring-0'
-                                                placeholder='10/04/1945'
+                                                placeholder='10-04-1945'
                                                 {...field}
                                             />
                                         </FormControl>
@@ -203,6 +204,7 @@ const ProfileChangeInfo = () => {
                                         <FormControl>
                                             <Input
                                                 className='focus-visible:ring-offset-0 focus-visible:ring-0'
+                                                placeholder='Địa chỉ ...'
                                                 {...field}
                                             />
                                         </FormControl>

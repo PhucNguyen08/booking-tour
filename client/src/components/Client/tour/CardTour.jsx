@@ -1,8 +1,15 @@
 /* eslint-disable react/prop-types */
 import { Card } from '@/components/ui/card';
-import { BadgeDollarSign, ChevronsRight, Clock, MapPin } from 'lucide-react';
+import {
+    BadgeDollarSign,
+    CalendarDays,
+    ChevronsRight,
+    Clock,
+    MapPin,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '@/utils/formatter';
+import { format } from 'date-fns';
 
 const CardTour = ({ tour }) => {
     return (
@@ -25,6 +32,24 @@ const CardTour = ({ tour }) => {
                     </Link>
                 </div>
                 <div className='text-base'>
+                    {tour?.schedules.length !== 0 && (
+                        <div className='flex gap-2 items-center'>
+                            <CalendarDays className='w-4 h-4' />
+                            <div className='line-clamp-1'>
+                                <span className='font-bold'>Khởi hành: </span>
+                                <span>
+                                    {tour.schedules
+                                        .map(ts =>
+                                            format(
+                                                ts.departureDay,
+                                                'dd/MM/yyyy'
+                                            )
+                                        )
+                                        .join(', ')}
+                                </span>
+                            </div>
+                        </div>
+                    )}
                     <div className='flex gap-2 items-center'>
                         <MapPin className='w-4 h-4' />
                         <div>
@@ -42,21 +67,30 @@ const CardTour = ({ tour }) => {
                             </span>
                         </div>
                     </div>
-                    <div className='flex gap-2 items-center'>
-                        <BadgeDollarSign className='w-4 h-4' />
-                        <div className='flex gap-1'>
-                            <span className='font-bold'>Giá: </span>
-                            <span className='text-[#ef1104] font-semibold'>
-                                {formatPrice.format(
-                                    tour?.schedules[0]?.adultPrice
-                                )}
-                            </span>
+                    {tour?.schedules.length !== 0 && (
+                        <div className='flex gap-2 items-center'>
+                            <BadgeDollarSign className='w-4 h-4' />
+                            <div className='flex gap-1'>
+                                <span className='font-bold'>Giá: </span>
+                                <span className='text-[#ef1104] font-semibold'>
+                                    {formatPrice.format(
+                                        tour?.schedules[0]?.adultPrice
+                                    )}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <div className='pt-2'>
                         <span className='flex justify-end text-[#27822a] items-center'>
                             <ChevronsRight className='w-4 h-4' />{' '}
-                            <Link className='hover:underline cursor-pointer'>
+                            <Link
+                                to={
+                                    '/detail-tour/' +
+                                    tour.id +
+                                    '/' +
+                                    tour.tourName
+                                }
+                                className='hover:underline cursor-pointer'>
                                 Xem thêm
                             </Link>
                         </span>

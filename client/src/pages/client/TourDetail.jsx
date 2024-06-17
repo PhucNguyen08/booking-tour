@@ -37,15 +37,13 @@ const TourDetail = props => {
         queryFn: () => getTour(id),
     });
 
-    console.log(query.data);
-
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         documentTitle: 'chương trình tour ' + name,
     });
 
     if (query.isLoading) {
-        return <div>Loading...</div>;
+        return <div className='hidden'>Loading...</div>;
     }
 
     return (

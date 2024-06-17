@@ -35,18 +35,30 @@ const Banner = () => {
     const queryLocation = useGetLocations();
 
     if (queryLocation.isLoading) {
-        return <div>Loading...</div>;
+        return <div className='hidden'>Loading...</div>;
     }
 
     const onSubmit = data => {
-        navigate(
-            `/tour/all?type=${data.typeId}&departure=${
-                data.departurePlaceId
-            }&destination=${data.destinationPlaceId}&departureDay=${format(
-                data.departureDay,
-                'yyyy-MM-dd'
-            )}`
-        );
+        let queryParams = '';
+
+        if (data.typeId) {
+            queryParams += `type=${data.typeId}&`;
+        }
+
+        if (data.departurePlaceId) {
+            queryParams += `departure=${data.departurePlaceId}&`;
+        }
+
+        if (data.destinationPlaceId) {
+            queryParams += `destination=${data.destinationPlaceId}&`;
+        }
+
+        queryParams += `departureDay=${format(
+            data.departureDay,
+            'yyyy-MM-dd'
+        )}`;
+
+        navigate(`/tour/all?${queryParams}`);
     };
     return (
         <section

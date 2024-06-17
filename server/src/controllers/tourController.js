@@ -239,6 +239,39 @@ const updateTour = async (req, res, next) => {
 
 const deleteTour = async (req, res, next) => {
     try {
+        const tour = await Tour.findByPk(req.params.id, {
+            attributes: {
+                exclude: ['departurePlaceId', 'destinationPlaceId'],
+            },
+            include: [
+                {
+                    model: TourImg,
+                    as: 'images',
+                    attributes: ['id', 'url'],
+                },
+                'tourSites',
+                'departurePlace',
+                'destinationPlace',
+            ],
+        });
+
+        await TourSite.destroy({
+            where: {
+                tourId: tour.id,
+            },
+        });
+
+        await tour.images.map(async image => {
+            const fileName = splitFileName(image.url);
+            deleteImage(fileName);
+        });
+
+        await TourImg.destroy({
+            where: {
+                tourId: tour.id,
+            },
+        });
+
         await Tour.destroy({
             where: {
                 id: req.params.id,
@@ -259,6 +292,7 @@ const searchToursPagination = async (req, res, next) => {
             typeId,
             departureDay,
             sort,
+            priceRange,
         } = req.body;
 
         const page = parseInt(req.query.page) || 1;
@@ -267,7 +301,7 @@ const searchToursPagination = async (req, res, next) => {
         const limit = pageSize;
 
         const totalTours = await Tour.count();
-
+        const currentDate = new Date();
         const searchTour = {};
 
         if (departurePlaceId) {
@@ -282,57 +316,21 @@ const searchToursPagination = async (req, res, next) => {
             searchTour.typeId = +typeId;
         }
 
-        if (
-            !departurePlaceId &&
-            !destinationPlaceId &&
-            !typeId &&
-            !departureDay
-        ) {
-            const toursAll = await Tour.findAll({
-                attributes: {
-                    exclude: [
-                        'departurePlaceId',
-                        'destinationPlaceId',
-                        'typeId',
-                        'shortDesc',
-                        'tourProgramDesc',
-                        'createdAt',
-                        'updatedAt',
-                    ],
-                },
-                include: [
-                    'departurePlace',
-                    {
-                        model: TourSchedule,
-                        as: 'schedules',
-                        order: [['departureDay', 'ASC']],
-                        limit: 1,
-                        required: false,
-                    },
-                ],
-                limit: limit,
-                offset: offset,
-            });
+        const whereClause = {
+            departureDay: {
+                [Op.gt]: departureDay ? departureDay : currentDate,
+            },
+        };
 
-            sort &&
-                toursAll.sort((a, b) => {
-                    const aPriceAdult = a.schedules[0]
-                        ? a.schedules[0].adultPrice
-                        : 0;
-                    const bPriceAdult = b.schedules[0]
-                        ? b.schedules[0].adultPrice
-                        : 0;
+        if (priceRange) {
+            const [minPrice, maxPrice] = priceRange.split('-');
 
-                    return sort === 'priceAsc'
-                        ? aPriceAdult - bPriceAdult
-                        : bPriceAdult - aPriceAdult;
-                });
-
-            return res.status(200).json({
-                tours: toursAll,
-                totalTours: totalTours,
-            });
+            whereClause.adultPrice = {
+                [Op.gte]: parseInt(minPrice, 10),
+                [Op.lte]: maxPrice ? parseInt(maxPrice, 10) : 999999999,
+            };
         }
+
         const tours = await Tour.findAll({
             attributes: {
                 exclude: [
@@ -350,40 +348,28 @@ const searchToursPagination = async (req, res, next) => {
                 {
                     model: TourSchedule,
                     as: 'schedules',
-                    where: departureDay
-                        ? {
-                              departureDay: {
-                                  [Op.eq]: departureDay,
-                              },
-                          }
-                        : {},
-                    order: [['departureDay', 'ASC']],
-                    limit: 1,
-                    required: false,
+                    where: whereClause,
+                    required: true,
                 },
                 'departurePlace',
             ],
             limit: limit,
             offset: offset,
+            ...(sort && {
+                order: [
+                    sort === 'priceAsc'
+                        ? ['schedules', 'adultPrice', 'ASC']
+                        : ['schedules', 'adultPrice', 'DESC'],
+                ],
+            }),
         });
-
-        sort &&
-            tours.sort((a, b) => {
-                const aPriceAdult = a.schedules[0]
-                    ? a.schedules[0].adultPrice
-                    : 0;
-                const bPriceAdult = b.schedules[0]
-                    ? b.schedules[0].adultPrice
-                    : 0;
-
-                return sort === 'priceAsc'
-                    ? aPriceAdult - bPriceAdult
-                    : bPriceAdult - aPriceAdult;
-            });
 
         res.status(200).json({
             tours: tours,
-            totalTours: totalTours,
+            totalTours:
+                Object.keys(searchTour).length === 0 && priceRange === null
+                    ? totalTours
+                    : tours.length,
         });
     } catch (error) {
         next(error);

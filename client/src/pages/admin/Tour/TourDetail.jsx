@@ -548,7 +548,7 @@ const TourDetail = () => {
                                     )}
                                 />
                             </div>
-                            <div className='col-start-1 col-end-4'>
+                            <div className='col-start-1 col-end-4 space-y-2'>
                                 <Label>Chương trình tour</Label>
                                 <ReactQuillCustom
                                     value={content}

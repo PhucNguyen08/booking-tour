@@ -135,8 +135,9 @@ const TypeTour = () => {
 
     const columns = [
         {
-            accessorKey: 'id',
-            header: 'Id',
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
         },
         {
             accessorKey: 'typeName',
@@ -168,12 +169,12 @@ const TypeTour = () => {
                     <div className='flex gap-1'>
                         <Button
                             variant='secondary'
-                            onClick={() => handleEdit(row.getValue('id'))}>
+                            onClick={() => handleEdit(row.original.id)}>
                             Sửa
                         </Button>
                         <Button
                             variant='secondary'
-                            onClick={() => handleDelete(row.getValue('id'))}>
+                            onClick={() => handleDelete(row.original.id)}>
                             Xóa
                         </Button>
                     </div>

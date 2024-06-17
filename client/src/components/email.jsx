@@ -45,15 +45,15 @@ const Email = props => {
                 </div>
                 <Separator className='my-2' />
                 <div className='p-4'>
-                    <p>Người đặt : {userOrder.fullName}</p>
-                    <p>Điện thoại : {userOrder.account}</p>
-                    <p>Địa chỉ : {userOrder.address}</p>
+                    <p>Người đặt: {userOrder.fullName}</p>
+                    <p>Điện thoại: {userOrder.account}</p>
+                    <p>Địa chỉ: {userOrder.address}</p>
                 </div>
                 <Separator className='my-2' />
                 <div className='flex flex-col gap-2 px-4'>
-                    <p>Mã lịch trình tour : {tourScheduleId}</p>
-                    <p>Số lượng người lớn : {numberOfAdult}</p>
-                    <p>Số lượng trẻ em : {numberOfChild}</p>
+                    <p>Mã lịch trình tour: {tourScheduleId}</p>
+                    <p>Số lượng người lớn: {numberOfAdult}</p>
+                    <p>Số lượng trẻ em: {numberOfChild}</p>
                 </div>
                 <Separator className='my-2' />
                 <h3 className='px-4 font-bold'>Thông tin khách hàng</h3>

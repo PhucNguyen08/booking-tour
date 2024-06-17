@@ -83,8 +83,9 @@ const Users = () => {
 
     const columns = [
         {
-            accessorKey: 'id',
-            header: 'Id',
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
         },
         {
             accessorKey: 'account',
@@ -129,7 +130,7 @@ const Users = () => {
                     <div className='flex gap-1'>
                         <Button
                             variant='secondary'
-                            onClick={() => handleEdit(row.getValue('id'))}>
+                            onClick={() => handleEdit(row.original.id)}>
                             Xem
                         </Button>
                         <Button variant='secondary'>Xóa</Button>
@@ -144,7 +145,6 @@ const Users = () => {
         form.setValue('account', res.account);
         form.setValue('email', res.email);
         form.setValue('fullName', res.fullName);
-        form.setValue('isAdmin', res.isAdmin);
         openModal();
         setIsEdit(true);
     };

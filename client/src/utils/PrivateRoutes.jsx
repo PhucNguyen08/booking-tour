@@ -8,7 +8,7 @@ import { getCurrentAdmin } from './getCurrentUser';
 export const PrivateClientRoutes = () => {
     const { user } = useContext(UserContext);
 
-    return user?.fullName ? <Outlet /> : <Navigate to='/auth/login' />;
+    return user?.fullName ? <Outlet /> : <Navigate to='/login' />;
 };
 
 export const PrivateAdminRoutes = () => {

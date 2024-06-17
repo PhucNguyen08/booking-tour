@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// ? Admin
 import Login from './pages/admin/Login/LoginIndex';
-import Home from './pages/client/Home';
-import ClientLayout from './components/Client/layout/Layout';
 import AdminLayout from './components/Admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard/DashboardIndex';
 import Site from './pages/admin/Site/SiteIndex';
@@ -15,6 +14,11 @@ import TourSchedule from './pages/admin/Tour/TourSchedule';
 import NewsAdmin from './pages/admin/News/NewsIndex';
 import NewsDetailAdmin from './pages/admin/News/NewsDetail';
 import ClientTour from './pages/admin/ClientTour/ClientTourIndex';
+import ProfileAdmin from './pages/admin/Profile/ProfileAdmin';
+import ChangePasswordAdmin from './pages/admin/Profile/ChangePassword';
+// ? Client
+import ClientLayout from './components/Client/layout/Layout';
+import Home from './pages/client/Home';
 import LoginClient from './pages/client/Auth/Login';
 import RegisterClient from './pages/client/Auth/Register';
 import ListTour from './pages/client/ListTour/ListTourIndex';
@@ -35,10 +39,11 @@ import ResetPassword from './pages/client/Auth/ResetPassword';
 import NotFound from './pages/NotFound';
 import { PrivateAdminRoutes, PrivateClientRoutes } from './utils/PrivateRoutes';
 import { ToastContainer } from 'react-toastify';
+import { ThemeProvider } from './components/theme-provider';
 
 function App() {
     return (
-        <>
+        <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<ClientLayout />}>
@@ -126,6 +131,11 @@ function App() {
                             />
                             <Route path='order' element={<Order />} />
                             <Route path='users' element={<Users />} />
+                            <Route path='profile' element={<ProfileAdmin />} />
+                            <Route
+                                path='change-password'
+                                element={<ChangePasswordAdmin />}
+                            />
                         </Route>
                     </Route>
                     <Route path='admin/login' element={<Login />} exact />
@@ -133,7 +143,7 @@ function App() {
                 </Routes>
             </BrowserRouter>
             <ToastContainer />
-        </>
+        </ThemeProvider>
     );
 }
 

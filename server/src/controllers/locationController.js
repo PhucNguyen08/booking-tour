@@ -5,6 +5,11 @@ const getLocations = async (req, res, next) => {
     try {
         const locations = await Location.findAll({
             include: 'parent',
+            // where: {
+            //     parentId: {
+            //         [Op.not]: null,
+            //     },
+            // },
             order: [['locationName', 'ASC']],
         });
 

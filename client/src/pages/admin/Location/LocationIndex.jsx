@@ -178,8 +178,9 @@ const Location = () => {
 
     const columns = [
         {
-            accessorKey: 'id',
-            header: 'Id',
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
         },
         {
             accessorKey: 'locationName',
@@ -187,6 +188,7 @@ const Location = () => {
             cell: ({ row }) => {
                 return (
                     <div className='truncate w-[250px]'>
+                        {console.log(row)}
                         {row.getValue('locationName')}
                     </div>
                 );
@@ -210,12 +212,12 @@ const Location = () => {
                     <div className='flex gap-1'>
                         <Button
                             variant='secondary'
-                            onClick={() => handleEdit(row.getValue('id'))}>
+                            onClick={() => handleEdit(row.original.id)}>
                             Sửa
                         </Button>
                         <Button
                             variant='secondary'
-                            onClick={() => handleDelete(row.getValue('id'))}>
+                            onClick={() => handleDelete(row.original.id)}>
                             Xóa
                         </Button>
                     </div>

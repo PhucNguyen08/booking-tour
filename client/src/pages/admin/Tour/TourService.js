@@ -136,6 +136,16 @@ const updateTour = async data => {
     }
 };
 
+const deleteTour = async id => {
+    try {
+        const response = await newRequest.delete('/tour/' + id);
+        return response.data;
+    } catch (error) {
+        console.error('Delete error', error);
+        throw error;
+    }
+};
+
 // ! Loại tour
 const getTypeTours = async () => {
     try {
@@ -196,6 +206,7 @@ export {
     getTour,
     createTour,
     updateTour,
+    deleteTour,
     getTypeTour,
     getTypeTours,
     createTypeTour,

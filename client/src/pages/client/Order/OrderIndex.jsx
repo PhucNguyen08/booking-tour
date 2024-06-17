@@ -179,7 +179,7 @@ const Order = () => {
                             </TableRow>
                             <TableRow>
                                 <TableCell className='px-0'>
-                                    Trẻ em (10 tuổi trở lên)
+                                    Trẻ em (6-11 tuổi)
                                 </TableCell>
                                 <TableCell>
                                     {formatPrice.format(tour.childPrice)}

@@ -21,8 +21,9 @@ const News = () => {
 
     const columns = [
         {
-            accessorKey: 'id',
-            header: 'Id',
+            accessorKey: 'index',
+            header: 'STT',
+            cell: ({ row }) => row.index + 1,
         },
         {
             accessorKey: 'title',
@@ -53,12 +54,12 @@ const News = () => {
                     <div className='flex gap-1'>
                         <Button
                             variant='secondary'
-                            onClick={() => handleEdit(row.getValue('id'))}>
+                            onClick={() => handleEdit(row.original.id)}>
                             Sửa
                         </Button>
                         <Button
                             variant='secondary'
-                            onClick={() => handleDelete(row.getValue('id'))}>
+                            onClick={() => handleDelete(row.original.id)}>
                             Xóa
                         </Button>
                     </div>
@@ -112,7 +113,7 @@ const News = () => {
                     filter={'title'}
                     onClick={handleAdd}
                 />
-                {query.isLoading && <div>Loading...</div>}
+                {query.isLoading && <div className='hidden'>Loading...</div>}
                 <CustomModal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}

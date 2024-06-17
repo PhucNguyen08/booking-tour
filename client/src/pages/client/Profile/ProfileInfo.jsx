@@ -29,34 +29,33 @@ const ProfileInfo = () => {
                         <span className='absolute left-0 text-[#999999]'>
                             Họ tên
                         </span>
-                        <span>{user?.fullName}</span>
+                        {user?.fullName}
                     </li>
                     <li className='relative pl-[150px] pt-3'>
                         <span className='absolute left-0 text-[#999999]'>
                             Email
                         </span>
-                        <span>{user?.email}</span>
+                        {user?.email}
                     </li>
                     <li className='relative pl-[150px] pt-3'>
                         <span className='absolute left-0 text-[#999999]'>
                             Số ĐT
                         </span>
-                        <span>{user?.account}</span>
+                        {user?.account}
                     </li>
                     <li className='relative pl-[150px] pt-3'>
                         <span className='absolute left-0 text-[#999999]'>
                             Ngày sinh
                         </span>
-                        <span>
-                            {user?.birthDate &&
-                                format(user?.birthDate, 'dd-MM-yyyy')}
-                        </span>
+                        {user?.birthDate
+                            ? format(user?.birthDate, 'dd-MM-yyyy')
+                            : '\u00a0'}
                     </li>
                     <li className='relative pl-[150px] pt-3'>
                         <span className='absolute left-0 text-[#999999]'>
                             Địa chỉ
                         </span>
-                        <span>{user?.address}</span>
+                        {user?.address || '\u00a0'}
                     </li>
                 </ul>
                 <Button onClick={handleEdit} className='bg-blueColor mt-10'>

@@ -60,9 +60,16 @@ const OrderSuccess = () => {
                         </p>
                     </>
                 ) : (
-                    <h3 className='font-semibold text-blueColor text-2xl'>
-                        THANH TOÁN THẤT BẠI
-                    </h3>
+                    <>
+                        <h3 className='font-semibold text-blueColor text-2xl'>
+                            ĐẶT CHỖ THẤT BẠI
+                        </h3>
+                        <p className='text-center text-base'>
+                            Thanh toán online không thành công. Booking của bạn
+                            đã được lưu lại. Chúng tôi sẽ liên hệ lại trong thời
+                            gian sớm nhất có thể, xin cảm ơn.
+                        </p>
+                    </>
                 )}
                 <Button
                     onClick={handleClick}

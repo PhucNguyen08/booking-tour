@@ -144,26 +144,25 @@ const confirmOrder = async (req, res, next) => {
 
         const order = await Order.findByPk(req.params.id);
 
-        const tourSchedule = await TourSchedule.findByPk(
-            order.dataValues.tourScheduleId
-        );
+        const tourSchedule = await TourSchedule.findByPk(order.tourScheduleId);
 
-        const totalParticipants =
-            order.dataValues.numberOfChild + order.dataValues.numberOfAdult;
+        const totalParticipants = order.numberOfChild + order.numberOfAdult;
+
         const availableParticipants =
-            tourSchedule.dataValues.maxParticipants - totalParticipants;
+            tourSchedule.maxParticipants -
+            tourSchedule.numberOfParticipantsBooked -
+            totalParticipants;
 
         await TourSchedule.update(
             {
-                numberOfParticipantsBooked: totalParticipants,
+                numberOfParticipantsBooked:
+                    tourSchedule.numberOfParticipantsBooked + totalParticipants,
                 status:
-                    availableParticipants === 0
-                        ? 'full'
-                        : tourSchedule.dataValues.status,
+                    availableParticipants === 0 ? 'full' : tourSchedule.status,
             },
             {
                 where: {
-                    id: order.dataValues.tourScheduleId,
+                    id: order.tourScheduleId,
                 },
             }
         );
@@ -177,6 +176,7 @@ const confirmOrder = async (req, res, next) => {
 
         await transporter.sendMail(options);
         console.log('Email sent successfully');
+        res.status(200).json({ message: 'Successfully' });
     } catch (error) {
         next(error);
     }

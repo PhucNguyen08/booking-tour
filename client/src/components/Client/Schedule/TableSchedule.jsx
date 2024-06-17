@@ -95,10 +95,10 @@ const TableSchedule = props => {
                                         childPrice: item.childPrice,
                                         adultPrice: item.adultPrice,
                                     })
-                                }>
-                                {item.maxParticipants ===
-                                item.numberOfParticipantsBooked
-                                    ? 'Liên hệ'
+                                }
+                                disabled={item.status === 'full'}>
+                                {item.status === 'full'
+                                    ? 'Hết chỗ'
                                     : 'Đặt tour'}
                             </Button>
                         </TableCell>
