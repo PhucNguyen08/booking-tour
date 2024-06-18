@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'react-tabs/style/react-tabs.css';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { store } from './store/configureStore.js';

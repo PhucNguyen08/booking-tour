@@ -19,7 +19,7 @@ const CardTour = ({ tour }) => {
                     <img
                         src={tour.coverImg}
                         alt={tour.tourName}
-                        className='card-zoom-image md:w-full md:h-[190px] object-cover'
+                        className='card-zoom-image md:w-full xl:h-[190px] object-cover'
                     />
                 </Link>
             </div>

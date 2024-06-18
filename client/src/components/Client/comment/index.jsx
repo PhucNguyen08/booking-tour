@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import PaginationSection from '@/components/paginationSection/PaginationSection';
 import { socket } from '@/utils/socket';
 import { UserContext } from '@/context/userContext';
+import { toast } from 'react-toastify';
 
 const Comment = props => {
     const { tourId } = props;
@@ -30,6 +31,13 @@ const Comment = props => {
     const { mutate } = useMutation({
         mutationFn: createCommentTour,
     });
+
+    const isObjectEmpty = objectName => {
+        return (
+            Object.keys(objectName).length === 0 &&
+            objectName.constructor === Object
+        );
+    };
 
     useEffect(() => {
         socket.on('comment-response', () => {
@@ -61,6 +69,19 @@ const Comment = props => {
     };
 
     const handleComment = () => {
+        if (isObjectEmpty(user)) {
+            toast.error('Bạn phải đăng nhập tài khoản', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+            return;
+        }
         if (contentComment === '') {
             return;
         }
@@ -73,7 +94,7 @@ const Comment = props => {
     };
 
     if (query.isLoading) {
-        return <div>Loading...</div>;
+        return <div className='hidden'>Loading...</div>;
     }
 
     return (

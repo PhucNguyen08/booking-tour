@@ -22,6 +22,7 @@ import { Label } from '@/components/ui/label';
 import { transformFile } from '@/utils/uploadImg';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import ReactQuillCustom from '@/components/reactQuill/ReactQuillCustom';
+import { BeatLoader } from 'react-spinners';
 
 const schema = yup.object({
     title: yup.string().required(),
@@ -78,7 +79,7 @@ const NewsDetail = () => {
         });
     };
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: createNews,
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -99,7 +100,7 @@ const NewsDetail = () => {
         },
     });
 
-    const { mutate: mutateUpdate } = useMutation({
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useMutation({
         mutationFn: updateNews,
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -178,7 +179,17 @@ const NewsDetail = () => {
                             </div>
                         </div>
                         <div className='text-right pt-6'>
-                            <Button type='submit'>Lưu</Button>
+                            <Button type='submit'>
+                                {isPending || isPendingUpdate ? (
+                                    <BeatLoader
+                                        color='#fff'
+                                        loading={isPending || isPendingUpdate}
+                                        size={10}
+                                    />
+                                ) : (
+                                    'Lưu'
+                                )}
+                            </Button>
                         </div>
                     </form>
                 </Form>

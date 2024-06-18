@@ -18,23 +18,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RegisterPost } from '@/utils/api';
 import Breadcrumb from '@/components/Client/breadcrumb/Breadcrumb';
+import DatePicker from 'react-date-picker';
+import { format } from 'date-fns';
 
 const schema = yup.object({
     fullName: yup.string().required('Vui lòng nhập tên'),
-    email: yup.string().email().required('Vui lòng nhập email'),
-    account: yup.string().length(10),
+    email: yup
+        .string()
+        .email('Vui lòng nhập đúng định dạng email')
+        .required('Vui lòng nhập email'),
+    birthDate: yup.date().required('Vui lòng chọn ngày sinh'),
+    account: yup
+        .string()
+        .required('Vui lòng nhập số điện thoại')
+        .matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, 'Số điện thoại không hợp lệ'),
     password: yup
         .string()
         .required('Vui lòng nhập mật khẩu')
         .min(6, 'Mật khẩu của bạn quá ngắn.'),
     passwordConfirmation: yup
         .string()
-        .oneOf([yup.ref('password')], 'Mật khẩu phải trùng khớp'),
+        .oneOf([yup.ref('password')], 'Mật khẩu phải trùng khớp')
+        .required('Vui lòng nhập mật khẩu'),
 });
 
 const defaultValues = {
     fullName: '',
     email: '',
+    account: '',
     password: '',
     passwordConfirmation: '',
 };
@@ -44,7 +55,7 @@ const RegisterClient = () => {
     const { mutate } = useMutation({
         mutationFn: RegisterPost,
         onSuccess: () => {
-            toast.success('Register Success', {
+            toast.success('Bạn đã đăng ký thành công', {
                 position: 'top-right',
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -66,11 +77,14 @@ const RegisterClient = () => {
         defaultValues: defaultValues,
     });
     const onSubmit = data => {
+        const formattedDate = format(data.birthDate, 'yyyy-MM-dd');
+
         mutate({
             fullName: data.fullName,
             account: data.account,
             password: data.password,
             email: data.email,
+            birthDate: formattedDate,
         });
     };
     return (
@@ -117,6 +131,24 @@ const RegisterClient = () => {
                                                     <Input
                                                         placeholder='Nhập tên người dùng'
                                                         {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name='birthDate'
+                                        render={({ field }) => (
+                                            <FormItem className='flex flex-col gap-2'>
+                                                <FormLabel>Ngày sinh</FormLabel>
+                                                <FormControl>
+                                                    <DatePicker
+                                                        {...field}
+                                                        className={
+                                                            'border-input'
+                                                        }
                                                     />
                                                 </FormControl>
                                                 <FormMessage />

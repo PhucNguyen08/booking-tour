@@ -87,6 +87,14 @@ img {
     @apply flex items-center justify-center;
 }
 
+.content-news .ql-align-center {
+    @apply text-center;
+}
+
+.content-news .ql-align-justify {
+    @apply text-justify;
+}
+
 .tour-detail p:has(img) img {
     @apply w-full;
 }
@@ -100,7 +108,7 @@ p img {
 }
 
 .card-zoom-image {
-    @apply w-full object-cover transition-all scale-100 duration-500 ease-in-out;
+    @apply w-full h-[300px] object-cover transition-all scale-100 duration-500 ease-in-out;
 }
 
 .card-zoom:hover .card-zoom-image {
@@ -113,4 +121,8 @@ p img {
 
 .scrollbar::-webkit-scrollbar-thumb {
     @apply rounded bg-[#ccc];
+}
+
+.react-date-picker__wrapper {
+    border-color: hsl(214.3, 31.8%, 91.4%) !important;
 }

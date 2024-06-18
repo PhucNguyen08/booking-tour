@@ -15,10 +15,8 @@ const NewsDetail = () => {
         queryFn: () => getOneNews(id),
     });
 
-    console.log(query.data);
-
     if (query.isLoading) {
-        return <div>Loading...</div>;
+        return <div className='hidden'>Loading...</div>;
     }
 
     return (
@@ -35,7 +33,7 @@ const NewsDetail = () => {
                     </span>
                     <Separator className='my-4' />
                     <div
-                        className='content-news'
+                        className='content-news text-justify'
                         dangerouslySetInnerHTML={{
                             __html: query.data.content,
                         }}></div>

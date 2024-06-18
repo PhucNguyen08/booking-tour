@@ -39,7 +39,8 @@ const TourDetail = props => {
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
-        documentTitle: 'chương trình tour ' + name,
+        pageStyle: '@page { size: padding: 10 20; }',
+        documentTitle: 'Chương trình tour ' + name,
     });
 
     if (query.isLoading) {
@@ -192,7 +193,7 @@ const TourDetail = props => {
                                 <TabPanel>
                                     <div
                                         ref={componentRef}
-                                        className='tour-detail'
+                                        className='tour-detail text-justify'
                                         dangerouslySetInnerHTML={{
                                             __html: query.data.tourProgramDesc,
                                         }}></div>

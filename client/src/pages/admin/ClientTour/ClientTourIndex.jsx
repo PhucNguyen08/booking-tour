@@ -139,11 +139,10 @@ const TourSchedule = () => {
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         documentTitle: 'list-client-' + id,
-        onAfterPrint: () => alert('print success'),
     });
 
     if (queryDetail.isLoading) {
-        <div>Loading...</div>;
+        <div className='hidden'>Loading...</div>;
     }
 
     return (

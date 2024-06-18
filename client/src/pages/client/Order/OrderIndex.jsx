@@ -47,10 +47,7 @@ const schema = yup.object({
     phoneNumber: yup
         .string()
         .required()
-        .matches(
-            /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
-            'Số điện thoại không hợp lệ'
-        ),
+        .matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, 'Số điện thoại không hợp lệ'),
     email: yup.string().email(),
     clients: yup.array(),
 });

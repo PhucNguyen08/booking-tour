@@ -22,11 +22,8 @@ import { UserContext } from '@/context/userContext';
 const schema = yup.object({
     account: yup
         .string()
-        .required()
-        .matches(
-            /(84|0[3|5|7|8|9])+([0-9]{8})\b/g,
-            'Số điện thoại không hợp lệ'
-        ),
+        .required('Vui lòng nhập số điện thoại')
+        .matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, 'Số điện thoại không hợp lệ'),
     password: yup
         .string()
         .required('Vui lòng nhập mật khẩu')

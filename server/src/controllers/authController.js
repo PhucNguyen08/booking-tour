@@ -9,7 +9,7 @@ dotenv.config();
 //? Đăng ký
 const register = async (req, res, next) => {
     try {
-        const { fullName, account, password, email } = req.body;
+        const { fullName, account, password, email, birthDate } = req.body;
 
         const user = await User.findOne({ where: { account: account } });
 
@@ -26,6 +26,7 @@ const register = async (req, res, next) => {
             account,
             password: passwordHash,
             email,
+            birthDate,
         });
 
         res.status(201).json({ message: 'You have successfully registered' });

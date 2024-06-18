@@ -324,7 +324,7 @@ const ListTour = () => {
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className='grid grid-cols-1 xl:grid-cols-3 gap-3'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3'>
                             {!query.isLoading ? (
                                 query.data.tours.length === 0 ? (
                                     <p className='text-center col-span-3'>

@@ -281,6 +281,7 @@ const Order = () => {
                                         <TableHead className='w-[200px]'>
                                             Tên khách hàng
                                         </TableHead>
+                                        <TableHead>Ngày sinh</TableHead>
                                         <TableHead>Email</TableHead>
                                         <TableHead>Số điện thoại</TableHead>
                                     </TableRow>
@@ -291,6 +292,12 @@ const Order = () => {
                                             <TableCell>{i + 1}</TableCell>
                                             <TableCell>
                                                 {item.fullName}
+                                            </TableCell>
+                                            <TableCell>
+                                                {format(
+                                                    item.birthDate,
+                                                    'dd-MM-yyyy'
+                                                )}
                                             </TableCell>
                                             <TableCell>{item.email}</TableCell>
                                             <TableCell>
