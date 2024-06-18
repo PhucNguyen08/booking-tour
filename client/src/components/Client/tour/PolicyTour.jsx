@@ -15,8 +15,8 @@ const PolicyTour = () => {
                     <br />* Vé trẻ em:
                 </strong>
                 <br />
-                - Trẻ em từ 6 đến 11 tuổi mua một nửa giá vé người lớn, trẻ em
-                trên 11 tuổi mua vé như người lớn.
+                - Trẻ em từ 6 đến 11 tuổi mua 70% giá vé người lớn, trẻ em trên
+                11 tuổi mua vé như người lớn.
                 <br />
                 - Đối với trẻ em dưới 6 tuổi, gia đình tự lo cho bé ăn ngủ và tự
                 trả phí tham quan (nếu có). Hai người lớn chỉ được kèm một trẻ

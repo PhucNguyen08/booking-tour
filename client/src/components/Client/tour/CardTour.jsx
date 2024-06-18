@@ -27,7 +27,7 @@ const CardTour = ({ tour }) => {
                 <div className='flex-1'>
                     <Link
                         to={'/detail-tour/' + tour.id + '/' + tour.tourName}
-                        className='text-[#003C71] text-base font-bold xl:h-[80px] line-clamp-3'>
+                        className='text-[#003C71] text-base font-bold h-[80px] line-clamp-3'>
                         {tour.tourName}
                     </Link>
                 </div>

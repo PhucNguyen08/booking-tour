@@ -10,7 +10,7 @@ const CardComment = props => {
             <Avatar>
                 <AvatarImage
                     src={image ? image : NoAvatar}
-                    className='w-9 h-9'
+                    className='w-[40px] h-[40px]'
                 />
                 <AvatarFallback>{fullName}</AvatarFallback>
             </Avatar>

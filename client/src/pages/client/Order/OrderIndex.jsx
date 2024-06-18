@@ -40,6 +40,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createOrder } from './OrderService';
 import { UserContext } from '@/context/userContext';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const schema = yup.object({
     fullName: yup.string().required(),
@@ -125,6 +126,20 @@ const Order = () => {
             { numberOfAdult: 0, numberOfChild: 0, totalPrice: 0 }
         );
 
+        if (result.numberOfAdult === 0 && result.numberOfChild > 0) {
+            toast.error('Trẻ em phải có người đi kèm trong tour', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+            return;
+        }
+        // console.log({ ...newData, ...result });
         mutate({ ...newData, ...result });
     };
 

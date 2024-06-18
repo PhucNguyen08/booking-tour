@@ -52,8 +52,8 @@ const TableSchedule = props => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className='w-[100px]'>Ngày khởi hành</TableHead>
-                    <TableHead>Mã Tour</TableHead>
+                    <TableHead>Ngày khởi hành</TableHead>
+                    <TableHead className='w-[300px]'>Mã Tour</TableHead>
                     <TableHead>Số chỗ còn</TableHead>
                     <TableHead>Giá người lớn</TableHead>
                     <TableHead>Giá trẻ em</TableHead>

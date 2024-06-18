@@ -7,7 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'react-tabs/style/react-tabs.css';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { store } from './store/configureStore.js';
 import { Provider } from 'react-redux';
 import { UserContextProvider } from './context/userContext.jsx';
@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <QueryClientProvider client={queryClient}>
                 <UserContextProvider>
                     <App />
-                    <ReactQueryDevtools initialIsOpen={false} />
+                    {/* <ReactQueryDevtools initialIsOpen={false} /> */}
                 </UserContextProvider>
             </QueryClientProvider>
         </Provider>

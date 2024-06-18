@@ -118,8 +118,11 @@ const getTours = async (req, res, next) => {
                 {
                     model: TourSchedule,
                     as: 'schedules',
-                    order: [['departureDay', 'ASC']],
-                    limit: 1,
+                    where: {
+                        departureDay: {
+                            [Op.gt]: currentDate,
+                        },
+                    },
                     required: false,
                 },
             ],

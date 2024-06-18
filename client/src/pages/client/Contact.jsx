@@ -134,20 +134,6 @@ const Contact = () => {
                                         />
                                         <FormField
                                             control={form.control}
-                                            name='phoneNumber'
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder='Điện thoại'
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
                                             name='content'
                                             render={({ field }) => (
                                                 <FormItem>

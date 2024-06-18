@@ -43,7 +43,7 @@ const createOrder = async (req, res, next) => {
         for (const user of clients) {
             const checkUser = await User.findOne({
                 where: {
-                    account: user.phoneNumber,
+                    account: user?.phoneNumber,
                 },
             });
 
@@ -52,9 +52,9 @@ const createOrder = async (req, res, next) => {
                 const passwordHash = bcrypt.hashSync('123456', salt);
 
                 const newUser = await User.create({
-                    account: user.phoneNumber,
+                    account: user?.phoneNumber || null,
                     birthDate: user.birthDate,
-                    email: user.email,
+                    email: user?.email || null,
                     password: passwordHash,
                     fullName: user.fullName,
                 });

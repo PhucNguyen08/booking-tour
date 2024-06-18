@@ -83,8 +83,8 @@ const Comment = props => {
                 <div className='flex gap-3'>
                     <Avatar>
                         <AvatarImage
-                            src={user?.image ? user?.image : NoAvatar}
-                            className='w-9 h-9'
+                            src={user?.avatar ? user?.avatar : NoAvatar}
+                            className='w-[40px] h-[40px]'
                         />
                         <AvatarFallback>{user?.fullName}</AvatarFallback>
                     </Avatar>

@@ -305,7 +305,10 @@ const TourSchedule = () => {
                                                             }
                                                             value={field.value}>
                                                             <SelectTrigger className='w-full focus:ring-transparent mt-2'>
-                                                                <SelectValue placeholder='Chọn tour' />
+                                                                <SelectValue
+                                                                    placeholder='Chọn tour'
+                                                                    className='w-1/2'
+                                                                />
                                                             </SelectTrigger>
                                                             <SelectContent className='overflow-y-auto max-h-[10rem]'>
                                                                 <SelectGroup>

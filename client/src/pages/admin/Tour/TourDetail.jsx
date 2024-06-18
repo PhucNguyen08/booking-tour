@@ -182,6 +182,19 @@ const TourDetail = () => {
     });
 
     const onSubmit = data => {
+        if (data.numberOfDay < data.numberOfNight) {
+            toast.error('Số ngày phải lớn hơn số đêm', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+            return;
+        }
         if (tourImgs.length < 6) {
             toast.error('Bạn phải chọn 6 ảnh Tour', {
                 position: 'top-right',
@@ -611,9 +624,36 @@ const TourDetail = () => {
                                     </Select>
                                     <Button
                                         onClick={() => {
+                                            if (
+                                                fields.some(
+                                                    item =>
+                                                        item.siteId ===
+                                                            +selectSite &&
+                                                        item.day ===
+                                                            +inputDayRef.current
+                                                                .value
+                                                )
+                                            ) {
+                                                setSelectSite('');
+                                                inputDayRef.current.value = '';
+                                                toast.error(
+                                                    'Không được thêm địa danh trùng nhau',
+                                                    {
+                                                        position: 'top-right',
+                                                        autoClose: 3000,
+                                                        hideProgressBar: false,
+                                                        closeOnClick: true,
+                                                        pauseOnHover: true,
+                                                        draggable: true,
+                                                        progress: undefined,
+                                                        theme: 'light',
+                                                    }
+                                                );
+                                                return;
+                                            }
                                             append({
-                                                day: inputDayRef.current.value,
-                                                siteId: selectSite,
+                                                day: +inputDayRef.current.value,
+                                                siteId: +selectSite,
                                             });
                                             setSelectSite('');
                                             inputDayRef.current.value = '';
